@@ -2,53 +2,26 @@
 namespace Admin\Controller;
 use Think\Controller;
 class ProductController extends PublicController{
-	//***********************************************
-    public static $Array;//这个给检查产品的字段用 
-    public static $PRO_FENLEI; //这个给产品分类打勾用
-	//**************************************************
-	//**********************************************
-	//说明：产品列表管理 推荐 修改 删除 列表 搜索
+
+	private $bu_timestamp =':00:00';
 	//**********************************************
 	public function index(){
-		$aaa_pts_qx=1;
-		$id=(int)$_GET['id'];
-		$shop_id=(int)$_GET['shop_id'];
 
-		//搜索变量
-		$type=$this->htmlentities_u8($_GET['type']);
-		$tuijian=$this->htmlentities_u8($_GET['tuijian']);
-		$name=$this->htmlentities_u8($_GET['name']);
 		//===============================
 		// 产品列表信息 搜索
 		//===============================
 		//搜索
-		$where="1=1 AND pro_type=1 AND del<1";
-		$tuijian!=='' ? $where.=" AND type=$tuijian" : null;
-		$shop_id>0 ? $where.=" AND shop_id=$shop_id" : null;
-		$name!='' ? $where.=" AND name like '%$name%'" : null;
+		$where="1=1";
 		define('rows',5);
-		$count=M('product')->where($where)->count();
+		$count=M('themes')->where($where)->count();
 		$rows=ceil($count/rows);
 		$page=(int)$_GET['page'];
 		$page<0?$page=0:'';
 		$limit=$page*rows;
 		$page_index=$this->page_index($count,$rows,$page);
-		$productlist=M('product')->where($where)->order('addtime desc')->limit($limit,rows)->select();
-		//dump($productlist);exit;
-		foreach ($productlist as $k => $v) {
-			//$productlist[$k]['shangchang'] = M('shangchang')->where('id='.intval($v['shop_id']))->getField('name');
-			$productlist[$k]['cname'] = M('category')->where('id='.intval($v['cid']))->getField('name');
-			$productlist[$k]['brand'] = M('brand')->where('id='.intval($v['brand_id']))->getField('name');
-		}
-
-		//==========================
+		$productlist=M('themes')->where($where)->order('created desc')->limit($limit,rows)->select();
 		// 将GET到的数据再输出
-		//==========================
-		$this->assign('id',$id);
-		$this->assign('tuijian',$tuijian);
-		$this->assign('name',$name);
-		$this->assign('type',$type);
-		$this->assign('shop_id',$shop_id);
+	
 		$this->assign('page',$page);
 		//=============
 		// 将变量输出
@@ -65,127 +38,28 @@ class ProductController extends PublicController{
 
 		$id=(int)$_GET['id'];
 		$page=(int)$_GET['page'];
-		$name=$_GET['name'];
-		$type=$_GET['type'];
+	
 
 		if($_POST['submit']==true){
 		try{	
-			//如果不是管理员则查询商家会员的店铺ID
-			$id = intval($_POST['pro_id']);
+			$post =I('post.');
+			$id =$post['id'];
+			$hasThemeCount=M('themes')->where(array('theme_title'=>$post['theme_title']))->count();
+			if($hasThemeCount && !$id){
+				$this->ajaxReturn(array('error'=>403,'message'=>'主题标题已经存在了.'));
+			}
+			if( strtotime($post['end_time'].$this->bu_timestamp)< strtotime($post['beg_time'].$this->bu_timestamp)){
+				$this->ajaxReturn(array('error'=>403,'message'=>'结束时间必须大于开始时间.'));
+			}
 			$array=array(
-				'name'=>$_POST['name'] ,
-				'intro'=>$_POST['intro'] ,
-				'shop_id'=> intval($_POST['shop_id']) ,//所属店铺
-				'cid'=> intval($_POST['cid']) ,			//产品分类ID
-				'brand_id'=> intval($_POST['brand_id']) ,//产品品牌ID
-				'pro_number'=>$_POST['pro_number'] ,	//产品编号
-				'sort'=>(int)$_POST['sort'] , 
-				'price'=>(float)$_POST['price'] , 
-				'price_yh'=>(float)$_POST['price_yh'] ,
-				'price_jf'=>(float)$_POST['price_jf'] ,//赠送积分
-				'updatetime'=>time(),
-				'num'=>(int)$_POST['num'] ,			//库存
-				'content'=>$_POST['content'] , 
-				'company'=>$_POST['company'],  //产品单位
-				'pro_type'=>1,
-				'renqi' => intval($_POST['renqi']),
-				'is_hot'=>intval($_POST['is_hot']),//是否热卖
-				'is_show'=>intval($_POST['is_show']),//是否新品
-				'is_sale'=>intval($_POST['is_sale']),//是否折扣
-				'weight'=>$_POST['weight']*100,//1kg数据库存100
+				'theme_title'=>$post['theme_title'] ,
+				'beg_time'=>strtotime($post['beg_time'].$this->bu_timestamp),
+				'end_time'=>strtotime($post['end_time'].$this->bu_timestamp),
+				'invite_code'=>$post['invite_code'],
 			);
-			  
-			//判断产品详情页图片是否有设置宽度，去掉重复的100%
-			if(strpos($array['content'],'width="100%"')){
-				$array['content']=str_replace(' width="100%"','',$array['content']);
-			}
-			if(strpos($array['content'], '&nbsp;<img')){
-				$array['content']=str_replace('&nbsp;<img','<img',$array['content']);
-			}
-			//为img标签添加一个width
-			$array['content']=str_replace('alt=""','alt="" width="100%"',$array['content']);
-		    //file_put_contents('./Data/content.txt', $array['content'].PHP_EOL,FILE_APPEND);
-			//上传产品小图
-			if (!empty($_FILES["photo_x"]["tmp_name"])) {
-					//文件上传
-					$info = $this->upload_images($_FILES["photo_x"],array('jpg','png','jpeg'),"product/".date(Ymd));
-				    if(!is_array($info)) {// 上传错误提示错误信息
-				        $this->error($info);
-				        exit();
-				    }else{// 上传成功 获取上传文件信息
-					    $array['photo_x'] = 'UploadFiles/'.$info['savepath'].$info['savename'];
-					    $xt = M('product')->where('id='.intval($id))->field('photo_x')->find();
-					    if ($id && $xt['photo_x']) {
-					    	$img_url = "Data/".$xt['photo_x'];
-							if(file_exists($img_url)) {
-								@unlink($img_url);
-							}
-					    }
-				    }
-			}
 
-			//上传产品大图
-			if (!empty($_FILES["photo_d"]["tmp_name"])) {
-					//文件上传
-					$info = $this->upload_images($_FILES["photo_d"],array('jpg','png','jpeg'),"product/".date(Ymd));
-				    if(!is_array($info)) {// 上传错误提示错误信息
-				        $this->error($info);
-				        exit();
-				    }else{// 上传成功 获取上传文件信息
-					    $array['photo_d'] = 'UploadFiles/'.$info['savepath'].$info['savename'];
-					    $dt = M('product')->where('id='.intval($id))->field('photo_d')->find();
-					    if ($id && $dt['photo_d']) {
-					    	$img_url2 = "Data/".$dt['photo_d'];
-							if(file_exists($img_url2)) {
-								@unlink($img_url2);
-							}
-					    }
-				    }
-			}
-
-			//多张商品轮播图上传
-		  	$up_arr = array();
-			if (!empty($_FILES["files"]["tmp_name"])) {
-					foreach ($_FILES["files"]['name'] as $k => $val) {
-						$up_arr[$k]['name'] = $val;
-					}
-
-					foreach ($_FILES["files"]['type'] as $k => $val) {
-						$up_arr[$k]['type'] = $val;
-					}
-
-					foreach ($_FILES["files"]['tmp_name'] as $k => $val) {
-						$up_arr[$k]['tmp_name'] = $val;
-					}
-
-					foreach ($_FILES["files"]['error'] as $k => $val) {
-						$up_arr[$k]['error'] = $val;
-					}
-
-					foreach ($_FILES["files"]['size'] as $k => $val) {
-						$up_arr[$k]['size'] = $val;
-					}
-			}
-			if ($up_arr) {
-					$res=array();
-					$adv_str = '';
-					foreach ($up_arr as $key => $value) {
-						$res = $this->upload_images($value,array('jpg','png','jpeg'),"product/".date(Ymd));
-					    if(is_array($res)) {
-					    	// 上传成功 获取上传文件信息保存数据库
-					    	$adv_str .= ','.'UploadFiles/'.$res['savepath'].$res['savename'];
-					    }
-					}
-					$array['photo_string'] = $adv_str;
-			}
-			
 			//执行添加
 			if(intval($id)>0){
-				$imgs = M('product')->where('id='.intval($id))->getField('photo_string');
-				if ($imgs && $array['photo_string']) {
-					$array['photo_string'] = $imgs.$array['photo_string'];
-				}
-
 				//将空数据排除掉，防止将原有数据空置
 				foreach ($array as $k => $v) {
 					if(empty($v)){
@@ -193,85 +67,45 @@ class ProductController extends PublicController{
 					}
 				}
 
-				$sql = M('product')->where('id='.intval($id))->save($array);
+				$sql = M('themes')->where('id='.intval($id))->save($array);
 			}else{
-				$array['addtime']=time();
-				$sql = M('product')->add($array);
+				$array['created']=time();
+				$sql = M('themes')->add($array);
 				$id=$sql;
 			}
 
 			//规格操作
 			if($sql){//name="guige_name[]
-				$this->success('操作成功.');
-				exit();
+				$this->ajaxReturn(array('error'=>0,'message'=>'操作成功'));
 			}else{
-				throw new \Exception('操作失败.');
+				//throw new \Exception('操作失败.');
+				$this->ajaxReturn(array('error'=>403,'message'=>'操作失败'));
 			}
 			  
 			}catch(\Exception $e){
-				echo "<script>alert('".$e->getMessage()."');location='{:U('index')}?shop_id=".$shop_id."';</script>";
+				$this->ajaxReturn(array('error'=>403,'message'=>$e->getMessage()));
+				//echo "<script>alert('".$e->getMessage()."');location='{:U('index')}';</script>";
 			}
 		}
 
-		//=========================
-		// 查询所有一级产品分类
-		//=========================
-		$cate_list = M('category')->where('tid=1')->field('id,name')->select();
-		$this->assign('cate_list',$cate_list);
-
-		//=========================
-		// 查询产品信息
-		//=========================
-		$pro_allinfo= $id>0 ? M('product')->where('id='.$id)->find() : "";
-		//商场信息
-		$shangchang= $pro_allinfo ? M('shangchang')->where('id='.intval($pro_allinfo['shop_id']))->find() : "";
-		//产品分类
-		$tid = M('category')->where('id='.intval($pro_allinfo['cid']))->getField('tid');
-		$pro_allinfo['tid'] = intval($tid);
-		if ($tid) {
-			$catetwo = M('category')->where('tid='.intval($tid))->field('id,name')->select();
-			$this->assign('catetwo',$catetwo);
-		}
-
-		//获取所有商品轮播图
-		if ($pro_allinfo['photo_string']) {
-			$img_str = explode(',', trim($pro_allinfo['photo_string'],','));
-			$this->assign('img_str',$img_str);
-		}
-
-		//=========================
-		// 查询所有品牌
-		//=========================
-		$brand_list = M('brand')->where('1=1')->field('id,name')->select();
-		$this->assign('brand_list',$brand_list);
+		$pro_allinfo =$id?M('themes')->where(array('id'=>$id))->find():'';
 
 		//==========================
 		// 将GET到的数据再输出
 		//==========================
 		$this->assign('id',$id);
-		$this->assign('name',$name);
-		$this->assign('type',$type);
-		$this->assign('shop_id',$shop_id);
 		$this->assign('page',$page);
+		$this->assign('title',$id?"修改活动主题":"添加活动主题");
 		//=============
 		// 将变量输出
 		//=============	
 		$this->assign('pro_allinfo',$pro_allinfo);
-		$this->assign('shangchang',$shangchang);
+
 		$this->display();
 
 	}
 
-	/*
-	* 商品获取二级分类
-	*/
-	public function getcid(){
-		$cateid = intval($_REQUEST['cateid']);
-		$catelist = M('category')->where('tid='.intval($cateid))->field('id,name')->select();
-		echo json_encode(array('catelist'=>$catelist));
-		exit();
-	}
-
+	
 	/*
 	* 商品单张图片删除
 	*/

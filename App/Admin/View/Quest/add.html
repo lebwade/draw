@@ -1,0 +1,34 @@
+<include file="Public/header" />
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 问卷题目管理 <span class="c-gray en">&gt;</span> 添加问卷题目 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <form class="form form-horizontal" method="post" id="ac_from"  enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{$singleRow.id}" />
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>问卷问题：</label>
+            <div class="formControls col-xs-8 col-sm-3">
+                <input type="text" class="input-text" placeholder="问卷问题" name="question" id="question" value="{$singleRow.question}">
+            </div>
+        </div>
+        <div class="row cl" id="answerNext">
+            <label class="form-label col-xs-4 col-sm-3" style="margin-top: 15px;"><span class="c-red">*</span>问卷答案：</label>
+            <div class="formControls col-xs-8 col-sm-8">
+            	<template v-for="item in list">
+
+            		<div class="answer_div" >
+	            		<input type="text" name="answer[]" class="input-text" style="width: 60%;">
+		            	<input type="radio" name="result[]" value="1"  id="is_on_no_{{item.current}}"  checked ><label for="is_on_no_{{item.current}}">否</label>
+		            	<input type="radio" name="result[]" value="2" id="is_on_yes_{{item.current}}" ><label for="is_on_yes_{{item.current}}">是</label>
+		            	<span class="plus-add" v-on:click="addPush()" v-if="item.current ==1" ><i class="icon-plus-sign-alt pointer"></i></span>
+		            	<span class="plus-minus" v-on:click="minusPush()" v-else><i class="icon-minus-sign pointer"></i></span>
+            		</div>
+            	</template>
+            	
+            	
+            </div>
+        </div>
+
+
+    </form>
+</div>
+<script type="text/javascript" src="__PUBLIC__/admin/js/admin-customer.js"></script>
