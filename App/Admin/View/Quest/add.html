@@ -13,14 +13,13 @@
         <div class="row cl" id="answerNext">
             <label class="form-label col-xs-4 col-sm-3" style="margin-top: 15px;"><span class="c-red">*</span>问卷答案：</label>
             <div class="formControls col-xs-8 col-sm-8">
-            	<template v-for="item in list">
-
-            		<div class="answer_div" >
-	            		<input type="text" name="answer[]" class="input-text" style="width: 60%;">
-		            	<input type="radio" name="result[]" value="1"  id="is_on_no_{{item.current}}"  checked ><label for="is_on_no_{{item.current}}">否</label>
-		            	<input type="radio" name="result[]" value="2" id="is_on_yes_{{item.current}}" ><label for="is_on_yes_{{item.current}}">是</label>
+            	<template v-for="(item,index) in list">
+            		<div class="answer_div" :key="item.current">
+	            		<input type="text"  v-bind:name="gernerateId('answer_',item.current)" class="input-text" style="width: 60%;">
+		            	<input type="radio" v-bind:name="gernerateId('result_',item.current)" value="1"  :id="gernerateId('is_on_no_',item.current)" checked ><label     v-bind:for="gernerateId('is_on_no_',item.current)">否</label>
+		            	<input type="radio" v-bind:name="gernerateId('result_',item.current)" value="2"  :id="gernerateId('is_on_yes_',item.current)"><label v-bind:for="gernerateId('is_on_yes_',item.current)">是</label>
 		            	<span class="plus-add" v-on:click="addPush()" v-if="item.current ==1" ><i class="icon-plus-sign-alt pointer"></i></span>
-		            	<span class="plus-minus" v-on:click="minusPush()" v-else><i class="icon-minus-sign pointer"></i></span>
+		            	<span class="plus-minus" v-on:click="minusPush(item.current)" v-else><i class="icon-minus-sign pointer"></i></span>
             		</div>
             	</template>
             	
