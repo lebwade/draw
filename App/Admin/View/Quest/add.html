@@ -10,6 +10,19 @@
                 <input type="text" class="input-text" placeholder="问卷问题" name="question" id="question" value="{$singleRow.question}">
             </div>
         </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>题库类型：</label>
+            <div class="formControls col-xs-8 col-sm-3">
+                <select name="type" id="type" class="select">
+                    <volist name="options" key='mykey' id="item">
+                        <option value="{$mykey}">{$item}</option>
+                    </volist>
+                </select>
+            </div>
+        </div>
+
+
+
         <div class="row cl" id="answerNext">
             <label class="form-label col-xs-4 col-sm-3" style="margin-top: 15px;"><span class="c-red">*</span>问卷答案：</label>
             <div class="formControls col-xs-8 col-sm-8">
@@ -26,7 +39,11 @@
             	
             </div>
         </div>
-
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius" type="button" name="tj_quest" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+            </div>
+        </div>
 
     </form>
 </div>

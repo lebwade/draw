@@ -20,8 +20,15 @@ new Vue({
 			_self.list.push(item);
 		},
 		minusPush:function(index){
-			let _self=this;
-				console.log(index);
+			let _self=this,
+				now_list=_self.list;
+				_self.list=[];
+				$.each(now_list,function(key,value){
+					if(value.current!=index){
+					let item={current:value.current,answer:value.answer};
+						_self.list.push(item);
+					}
+				})
 		},
 		gernerateId:function(prefix,index){
 			return prefix+index;

@@ -8,10 +8,12 @@
  */
 namespace Admin\Controller;
 use Think\Controller;
+use Admin\Model\QuestionsModel as QM;
 class QuestController extends PublicController{
 
 	public function _initialize(){
 		$this->Quest = M('questions');
+		$this->questModel=new QM();
 	}
 	public function add(){
 		$id =I('get.id');
@@ -21,6 +23,7 @@ class QuestController extends PublicController{
 		}
 		$singleRow =$this->Quest->where(array('id'=>$id))->find();
 		$this->assign('singleRow',$singleRow);
+		$this->assign('options',$this->questModel->options);
 		$this->display();
 	}
 	public function index(){
