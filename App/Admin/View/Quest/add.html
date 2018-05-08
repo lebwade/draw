@@ -1,6 +1,6 @@
 <include file="Public/header" />
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 问卷题目管理 <span class="c-gray en">&gt;</span> 添加问卷题目 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
-<div class="page-container">
+<div class="page-container" id="answerNext">
     <form class="form form-horizontal" method="post" id="ac_from"  enctype="multipart/form-data">
         <input type="hidden" name="id" value="{$singleRow.id}" />
 
@@ -10,6 +10,14 @@
                 <input type="text" class="input-text" placeholder="问卷问题" name="question" id="question" value="{$singleRow.question}">
             </div>
         </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>是否开启：</label>
+            <div class="formControls col-xs-8 col-sm-3">
+                <input type="radio"  placeholder="开启或者关闭" checked name="is_on" id="is_on_1" value="1"><label for="is_on_1">开启</label>
+                <input type="radio" style="margin-left: 15px;"  placeholder="开启或者关闭" <?=$singleRow['is_on']==2?'checked':''?> name="is_on" id="is_on_2" value="2"><label for="is_on_2">关闭</label>
+            </div>
+        </div>
+
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>题库类型：</label>
             <div class="formControls col-xs-8 col-sm-3">
@@ -23,14 +31,17 @@
 
 
 
-        <div class="row cl" id="answerNext">
+        <div class="row cl" >
             <label class="form-label col-xs-4 col-sm-3" style="margin-top: 15px;"><span class="c-red">*</span>问卷答案：</label>
             <div class="formControls col-xs-8 col-sm-8">
             	<template v-for="(item,index) in list">
             		<div class="answer_div" :key="item.current">
-	            		<input type="text"  v-bind:name="gernerateId('answer_',item.current)" class="input-text" style="width: 60%;">
+	            		<input type="text" :value="item.answer"  v-bind:name="gernerateId('answer_',item.current)" class="input-text" style="width: 60%;">
 		            	<input type="radio" v-bind:name="gernerateId('result_',item.current)" value="1"  :id="gernerateId('is_on_no_',item.current)" checked ><label     v-bind:for="gernerateId('is_on_no_',item.current)">否</label>
-		            	<input type="radio" v-bind:name="gernerateId('result_',item.current)" value="2"  :id="gernerateId('is_on_yes_',item.current)"><label v-bind:for="gernerateId('is_on_yes_',item.current)">是</label>
+		            	<input type="radio" v-bind:name="gernerateId('result_',item.current)" value="2"  :id="gernerateId('is_on_yes_',item.current)" v-if="item.is_correct==2" checked  class="is_opened">
+
+                        <input type="radio" v-bind:name="gernerateId('result_',item.current)" value="2"  :id="gernerateId('is_on_yes_',item.current)" v-else  class="is_opened"><label v-bind:for="gernerateId('is_on_yes_',item.current)">是</label>
+
 		            	<span class="plus-add" v-on:click="addPush()" v-if="item.current ==1" ><i class="icon-plus-sign-alt pointer"></i></span>
 		            	<span class="plus-minus" v-on:click="minusPush(item.current)" v-else><i class="icon-minus-sign pointer"></i></span>
             		</div>
@@ -41,7 +52,7 @@
         </div>
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-                <input class="btn btn-primary radius" type="button" name="tj_quest" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                <input class="btn btn-primary radius quest_tj" v-on:click="quest_tj();" type="button" name="tj_quest" value="提交">
             </div>
         </div>
 

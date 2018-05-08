@@ -9,7 +9,7 @@ class QuestionsModel extends Model{
 
 	protected $tableName = 'questions'; 
 	public $options =array(
-			self::TYPE_SIMPLE=>'A类型题库',
-			self::TYPE_DIFFICULT=>'B类型题库',
+			self::TYPE_SIMPLE=>'基础知识题库',
+			self::TYPE_DIFFICULT=>'操作题库',
 	);
 }
