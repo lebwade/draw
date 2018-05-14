@@ -56,6 +56,7 @@ class ProductController extends PublicController{
 				'beg_time'=>strtotime($post['beg_time'].$this->bu_timestamp),
 				'end_time'=>strtotime($post['end_time'].$this->bu_timestamp),
 				'invite_code'=>$post['invite_code'],
+				'is_open'=$post['is_open'],
 			);
 
 			//执行添加

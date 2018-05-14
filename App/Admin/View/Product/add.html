@@ -9,7 +9,13 @@
                 <input type="text" class="input-text" placeholder="活动主题" name="theme_title" id="theme_title" value="{$pro_allinfo.theme_title}">
             </div>
         </div>
-
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>是否开启：</label>
+            <div class="formControls col-xs-8 col-sm-3">
+                <input type="radio"  placeholder="开启或者关闭" checked name="is_open" id="is_open_1" value="1"><label for="is_open_1">开启</label>
+                <input type="radio" style="margin-left: 15px;"  placeholder="开启或者关闭" <?=$pro_allinfo['is_open']==2?'checked':''?> name="is_open" id="is_open_2" value="2"><label for="is_open_2">关闭</label>
+            </div>
+        </div>
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>活动开始时间：</label>
             <div class="formControls col-xs-8 col-sm-3">

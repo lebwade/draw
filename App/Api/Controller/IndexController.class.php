@@ -1,74 +1,67 @@
 <?php
 namespace Api\Controller;
 use Think\Controller;
+
+use Admin\Model\QuestionsModel;
 class IndexController extends PublicController {
+    public function __construct(){
+        parent::__construct();
+        $this->quest=M('questions');
+        $this->QuestionsModel=new QuestionsModel();
+        $this->themes=M('themes');
+        $this->userPlay=M('user_play');
+    }
 	//***************************
-	//  首页数据接口
+	//  首页获取问卷题目
 	//***************************
     public function index(){
-    	//如果缓存首页没有数据，那么就读取数据库
-    	/***********获取首页顶部轮播图************/
-    	$ggtop=M('guanggao')->order('sort desc,id asc')->field('id,name,photo')->limit(10)->select();
-		foreach ($ggtop as $k => $v) {
-			$ggtop[$k]['photo']=__DATAURL__.$v['photo'];
-			$ggtop[$k]['name']=urlencode($v['name']);
-		}
-    	/***********获取首页顶部轮播图 end************/
-
-        //======================
-        //首页推荐品牌 20个
-        //======================
-        $brand = M('brand')->where('1=1')->field('id,name,photo')->limit(20)->select();
-        foreach ($brand as $k => $v) {
-            $brand[$k]['photo'] = __DATAURL__.$v['photo'];
-        }
-
-        //======================
-        //首页培训课程
-        //======================
-        $course = M('course')->where('del=0')->order('id desc')->field('id,title,intro,photo')->select();
-        foreach ($course as $k => $v) {
-            $course[$k]['photo'] = __DATAURL__.$v['photo'];
-        }
-
-    	//======================
-    	//首页推荐产品
-    	//======================
-    	$pro_list = M('product')->where('del=0 AND pro_type=1 AND is_down=0 AND type=1')->order('sort desc,id desc')->field('id,name,intro,photo_x,price_yh,price,shiyong')->limit(8)->select();
-    	foreach ($pro_list as $k => $v) {
-    		$pro_list[$k]['photo_x'] = __DATAURL__.$v['photo_x'];
-    	}
-
-        //======================
-        //首页分类 自己组建数组
-        //======================
-        $indeximg = M('indeximg')->where('1=1')->order('id asc')->field('photo')->select();
-        $procat = array();
-        $procat[0]['name'] = '新闻资讯';
-        $procat[0]['imgs'] = __DATAURL__.$indeximg[0]['photo'];
-        $procat[0]['link'] = 'other';
-        $procat[0]['ptype'] = 'news';
-
-        $procat[1]['name'] = '教学优势';
-        $procat[1]['imgs'] = __DATAURL__.$indeximg[1]['photo'];
-        $procat[1]['link'] = 'other';
-        $procat[1]['ptype'] = 'jxys';
-
-        $procat[2]['name'] = '学员风采';
-        $procat[2]['imgs'] = __DATAURL__.$indeximg[2]['photo'];
-        $procat[2]['link'] = 'other';
-        $procat[2]['ptype'] = 'xyfc';
-
-        $procat[3]['name'] = '关于我们';
-        $procat[3]['imgs'] = __DATAURL__.$indeximg[3]['photo'];
-        $procat[3]['link'] = 'other';
-        $procat[3]['ptype'] = 'gywm';
-        $indexInfo =M('program')->where(array('id'=>1))->find();
-        $index_title =$indexInfo['index_title']?$indexInfo['index_title']:'热销产品';
-    	echo json_encode(array('index_title'=>$index_title,'ggtop'=>$ggtop,'procat'=>$procat,'prolist'=>$pro_list,'brand'=>$brand,'course'=>$course));
+        $questions=$this->QuestionsModel->randGetQuest();
+    	echo json_encode(array('questions'=>$questions,'qid'=>implode(',', array_keys($questions))));
     	exit();
     }
+    /**
+     * 保存用户答题数据
+     * [setQuestionByUser description]
+     */
+    public function setQuestionByUser(){
+        $fromuser =I('post.openid');
+        if(!$fromuser){
+            $response =array('error'=>405,'message'=>'参数错误');
+            $this->ajaxReturn($response);
+        }
+        $subject_id =I('post.subject_id');
+        $this->QuestionsModel->accuracy($subject_id);
+    }
+    /**
+     * 查询活动开启的信息
+     * [Authority description]
+     */
+    public function Authority(){
+       $activity= $this->themes->where(array('is_open'=>1))->order('beg_time DESC')->limit(1)->find();
+       $time =time();
+       if(empty($activity) || $time< $activity['beg_time'] || $time> $activity['end_time']){
+            $response =array('error'=>403,'message'=>'活动还没有开始或者已经结束');
+            $this->ajaxReturn($response);
+       }
+       $fromuser =I('post.openid');
+       if(!$fromuser){
+            $response =array('error'=>405,'message'=>'参数错误');
+            $this->ajaxReturn($response);
+       }
+       if($this->checkHasAnswer($activity['id'],$fromuser)){
+            $response =array('error'=>406,'message'=>'已经参加过本次活动了');
+            $this->ajaxReturn($response);
+       }
+       $questions=$this->QuestionsModel->randGetQuest();
 
+       //获取本次活动的问卷题目  api/index/
+       $response =array('error'=>0,'info'=>$activity['theme_title'],'questions'=>$questions,'qid'=>implode(',', array_keys($questions)));
+       $this->ajaxReturn($response);
+    }
+    private function checkHasAnswer($theme_id,$fromuser){
+        $hasBring =$this->userPlay->where(array('theme_id'=>$theme_id,'fromuser'=>$fromuser))->count();
+        return $hasBring?true:false;
+    }
     //***************************
     //  首页产品 分页
     //***************************
