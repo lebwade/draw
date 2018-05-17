@@ -26,6 +26,12 @@ class IndexController extends PublicController {
             $map['themd_id'] = $themesInfo['id'];
             $hasjoin =$this->userJoinTable->where($map)->count();
             if($hasjoin>0) $status=1;
+            if(time()>$themesInfo['beg_time'] && time()<$themesInfo['end_time']){
+                $status=2;
+            }else{
+                $status=0;
+            }
+
         }
         
     	echo json_encode(array('status'=>$status,'themes'=>$themesInfo,'questions'=>$questions,'qid'=>implode(',', array_keys($questions))));
