@@ -1,7 +1,7 @@
 <?php
 namespace Api\Controller;
 use Think\Controller;
-
+use Api\Model\ThemeModel;
 use Admin\Model\QuestionsModel;
 class IndexController extends PublicController {
     public function __construct(){
@@ -10,13 +10,25 @@ class IndexController extends PublicController {
         $this->QuestionsModel=new QuestionsModel();
         $this->themes=M('themes');
         $this->userPlay=M('user_play');
+        $this->themeModel =D('Theme');
+        $this->userJoinTable =M('user_join');
     }
 	//***************************
 	//  首页获取问卷题目
 	//***************************
     public function index(){
         $questions=$this->QuestionsModel->randGetQuest();
-    	echo json_encode(array('questions'=>$questions,'qid'=>implode(',', array_keys($questions))));
+        $uid =I('post.uid');
+        $themesInfo =$this->themeModel->themes();
+        if(!count($themesInfo)){
+            $status=0;
+        }else{
+            $map['themd_id'] = $themesInfo['id'];
+            $hasjoin =$this->userJoinTable->where($map)->count();
+            if($hasjoin>0) $status=1;
+        }
+        
+    	echo json_encode(array('status'=>$status,'themes'=>$themesInfo,'questions'=>$questions,'qid'=>implode(',', array_keys($questions))));
     	exit();
     }
     /**
