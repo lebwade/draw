@@ -34,7 +34,7 @@ class IndexController extends PublicController {
 
         }
         
-    	echo json_encode(array('status'=>$status,'themes'=>$themesInfo,'questions'=>$questions,'qid'=>implode(',', array_keys($questions))));
+    	echo json_encode(array('status'=>$status,'themes'=>$themesInfo));
     	exit();
     }
     /**
