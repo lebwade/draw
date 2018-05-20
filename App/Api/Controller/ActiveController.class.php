@@ -27,4 +27,10 @@ class ActiveController extends PublicController {
 		$questions=$this->QuestionsModel->randGetQuest();
 		$this->ajaxReturn(array('error'=>0,'questions'=>$questions,'qid'=>implode(',', array_keys($questions))));
 	}
+	public function check(){
+		if(IS_POST){
+			$post =I('post.');
+			print_r($post);
+		}
+	}
 }
