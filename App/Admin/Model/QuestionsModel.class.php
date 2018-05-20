@@ -71,8 +71,8 @@ class QuestionsModel extends Model{
 			$aResult['tid']=$aData['tid'];
 			$aResult['question']=$aData['question'];
 			$old_answer=unserialize($aData['answer']);
-			foreach($old_answer as $next){
-				$new_answer[]=array('attr_option'=>$next['attr_option']);
+			foreach($old_answer as $mykey=>$next){
+				$new_answer[]=array('attr_option'=>$next['attr_option'],'mykey'=>$mykey+1);
 			}
 			$aResult['answer']=$new_answer;
 		}
