@@ -32,7 +32,7 @@ class ActiveController extends PublicController {
 			$post =I('post.');
 			$choose =$post['chose'];
 			foreach($choose as $next){
-				echo $next->sort;
+				print_r($next);
 			}
 		}
 	}
