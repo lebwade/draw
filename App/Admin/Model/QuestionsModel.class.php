@@ -32,7 +32,6 @@ class QuestionsModel extends Model{
 	 */
 	public function randGetQuest()
 	{	
-		$i =0;
 		$title_arr =array(
 			1=>'题目一',
 			2=>'题目二',
@@ -47,8 +46,6 @@ class QuestionsModel extends Model{
 			$result = $this->getBasicData();
 			if(empty($result)) break;
 			if(!empty($result) && !array_key_exists($result['tid'], $all_list)){
-				$i++;
-				$result['title']=$title_arr[$i];
 				$all_list[$result['tid']]=$result;
 			}
 		}
@@ -56,13 +53,18 @@ class QuestionsModel extends Model{
 			$result = $this->getOperatorData();
 			if(empty($result)) break;
 			if(!empty($result) && !array_key_exists($result['tid'], $all_list)){
-				$i++;
-				$result['title']=$title_arr[$i];
 				$all_list[$result['tid']]=$result;
 			}
 		}
 		ksort($all_list);
-		return $all_list;
+		$new_all_list=array();
+		$i=0;
+		foreach($all_list as $key=>$next){
+			$i++;
+			$next['title']= $title_arr[$i];
+			$new_all_list[$key] = $next;
+		}
+		return $new_all_list;
 	}
 	private function getBasicData(){
 		$this->table =C('DB_PREFIX').$this->tableName;
