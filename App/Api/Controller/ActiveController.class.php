@@ -30,7 +30,9 @@ class ActiveController extends PublicController {
 	public function check(){
 		if(IS_POST){
 			$post =I('post.');
-			print_r($post);
+			$choose =$post['chose'];
+			$stdclass=explode(",", $choose);
+			print_r($stdclass);
 		}
 	}
 }
