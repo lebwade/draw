@@ -32,12 +32,23 @@ class QuestionsModel extends Model{
 	 */
 	public function randGetQuest()
 	{	
-		
+		$i =0;
+		$title_arr =array(
+			1=>'题目一',
+			2=>'题目二',
+			3=>'题目三',
+			4=>'题目四',
+			5=>'题目五',
+			6=>'题目六',
+			7=>'题目七',
+		);
 		$all_list=array();
 		while (count($all_list) < 3) {
 			$result = $this->getBasicData();
 			if(empty($result)) break;
 			if(!empty($result) && !array_key_exists($result['tid'], $all_list)){
+				$i++;
+				$result['title']=$title_arr[$i];
 				$all_list[$result['tid']]=$result;
 			}
 		}
@@ -45,6 +56,8 @@ class QuestionsModel extends Model{
 			$result = $this->getOperatorData();
 			if(empty($result)) break;
 			if(!empty($result) && !array_key_exists($result['tid'], $all_list)){
+				$i++;
+				$result['title']=$title_arr[$i];
 				$all_list[$result['tid']]=$result;
 			}
 		}
