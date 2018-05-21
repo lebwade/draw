@@ -31,9 +31,7 @@ class ActiveController extends PublicController {
 		if(IS_POST){
 			$post =I('post.');
 			$choose =$post['chose'];
-			foreach($choose as $next){
-				print_r($next);
-			}
+			print_r($choose);
 		}
 	}
 }
