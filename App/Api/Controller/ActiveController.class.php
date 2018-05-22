@@ -35,9 +35,11 @@ class ActiveController extends PublicController {
 			$str=json_decode(htmlspecialchars_decode($choose));
 			$correct = $this->getNumbers($str);
 			$questionAnswerLogTable=M('question_answer_log');
-			$save_data['theme_id']=$post['theme_id'];
+			$save_data['theme_id']=$post['themeid'];
 			$save_data['timu_id']=$post['qid'];
 			$save_data['correct']=$correct;
+			$save_data['created']=time();
+			$save_data['uid']=$post['uid'];
 			$res=$questionAnswerLogTable->add($save_data);
 			$this->ajaxReturn(array('error'=>0,'message'=>'提交成功','correct'=>$correct));
 		}
