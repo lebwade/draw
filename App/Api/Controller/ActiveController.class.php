@@ -30,9 +30,18 @@ class ActiveController extends PublicController {
 	public function check(){
 		if(IS_POST){
 			$post =I('post.');
+
 			$choose =$post['chose'];
 			$str=json_decode(htmlspecialchars_decode($choose));
-			print_r($str);
+			
+			$questionAnswerLogTable=M('question_answer_log');
+
+			$correct =0;
+			$save_data['theme_id']=$post['theme_id'];
+			$save_data['timu_id']=$post['qid'];
+			$save_data['correct']=$correct;
+			$res=$questionAnswerLogTable->add($save_data);
+			$this->ajaxReturn(array('error'=>0,'message'=>'提交成功'));
 		}
 		
 	}
