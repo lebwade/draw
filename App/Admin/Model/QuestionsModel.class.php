@@ -32,7 +32,15 @@ class QuestionsModel extends Model{
 	 */
 	public function randGetQuest()
 	{	
-		
+		$title_arr =array(
+			1=>'题目一',
+			2=>'题目二',
+			3=>'题目三',
+			4=>'题目四',
+			5=>'题目五',
+			6=>'题目六',
+			7=>'题目七',
+		);
 		$all_list=array();
 		while (count($all_list) < 3) {
 			$result = $this->getBasicData();
@@ -49,7 +57,14 @@ class QuestionsModel extends Model{
 			}
 		}
 		ksort($all_list);
-		return $all_list;
+		$new_all_list=array();
+		$i=0;
+		foreach($all_list as $key=>$next){
+			$i++;
+			$next['title']= $title_arr[$i];
+			$new_all_list[$key] = $next;
+		}
+		return $new_all_list;
 	}
 	private function getBasicData(){
 		$this->table =C('DB_PREFIX').$this->tableName;
