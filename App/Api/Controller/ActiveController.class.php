@@ -39,19 +39,27 @@ class ActiveController extends PublicController {
 			$save_data['timu_id']=$post['qid'];
 			$save_data['correct']=$correct;
 			$res=$questionAnswerLogTable->add($save_data);
-			$this->ajaxReturn(array('error'=>0,'message'=>'提交成功'));
+			$this->ajaxReturn(array('error'=>0,'message'=>'提交成功','correct'=>$correct));
 		}
 		
 	}
 	private function getNumbers($arr){
-
+		$my_answer_count=0;
 		foreach ($arr as $key => $value) {
 			$sort=$value->sort;
 			$correct=$value->value;
 			$answer = $this->QuestionsModel->getQuest($sort);
 			$this_answer=unserialize($answer);
-			print_r($this_answer);
-			exit;
+			$db_key=0;
+			foreach($this_answer as $key=>$v){
+				$mykey=$key+1;
+				if($v['attr_correct']==2){
+					$db_key=$mykey;
+					break;
+				}
+			}
+			if($db_key==$correct) $my_answer_count++;
 		}
+		return $my_answer_count;
 	}
 }
