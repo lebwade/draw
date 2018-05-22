@@ -68,8 +68,8 @@ new Vue({
 				data:$('#ac_from').serialize(),
 				success:function(d){
 					if(d.error==0){
-						//layer.msg(d.message);
-						//setTimeout(function(){location.href=_self.api.jumpUrl},1500);
+						layer.msg(d.message);
+						setTimeout(function(){location.href=_self.api.jumpUrl},1500);
 					}else{
 						layer.msg(d.message);
 					}
