@@ -13,6 +13,8 @@ class QuestController extends PublicController{
 
 	const ANSWERKEY='answer_';
 	const SAYKEY='result_';
+	private $Quest;
+	private $questModel;
 	public function _initialize(){
 		$this->Quest = M('questions');
 		$this->questModel=new QM();
@@ -77,7 +79,7 @@ class QuestController extends PublicController{
 			}
 			$data['answer']=serialize($type_select);
 			if($id){
-				$res=$this->Quest->save($data);
+				$res=$this->Quest->where(array('id'=>$id))->save($data);
 				$response=array('error'=>0,'message'=>'修改成功');
 				$this->ajaxReturn($response);
 			}else{

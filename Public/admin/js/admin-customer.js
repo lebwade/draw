@@ -17,7 +17,7 @@ new Vue({
 		],
 		mykey:1,
 		qid:0,
-		maxlength:4,
+		maxlength:3,
 	},
 	mounted:function(){
 		let _self=this;
@@ -52,7 +52,7 @@ new Vue({
 					return false;
 				}
 				if(now_list.length<_self.maxlength){
-					layer.msg('选项不能小于4个');
+					layer.msg('选项不能小于3个');
 					return false;
 				}
 			let isOnlyOne=0;
@@ -68,8 +68,8 @@ new Vue({
 				data:$('#ac_from').serialize(),
 				success:function(d){
 					if(d.error==0){
-						layer.msg(d.message);
-						setTimeout(function(){location.href=_self.api.jumpUrl},1500);
+						//layer.msg(d.message);
+						//setTimeout(function(){location.href=_self.api.jumpUrl},1500);
 					}else{
 						layer.msg(d.message);
 					}
