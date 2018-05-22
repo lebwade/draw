@@ -33,6 +33,9 @@ class ActiveController extends PublicController {
 
 			$choose =$post['chose'];
 			$str=json_decode(htmlspecialchars_decode($choose));
+			print_r($str);exit;
+
+
 			
 			$questionAnswerLogTable=M('question_answer_log');
 
