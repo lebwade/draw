@@ -33,13 +33,8 @@ class ActiveController extends PublicController {
 
 			$choose =$post['chose'];
 			$str=json_decode(htmlspecialchars_decode($choose));
-			print_r($str);exit;
-
-
-			
+			$correct = $this->getNumbers($str);
 			$questionAnswerLogTable=M('question_answer_log');
-
-			$correct =0;
 			$save_data['theme_id']=$post['theme_id'];
 			$save_data['timu_id']=$post['qid'];
 			$save_data['correct']=$correct;
@@ -47,5 +42,16 @@ class ActiveController extends PublicController {
 			$this->ajaxReturn(array('error'=>0,'message'=>'提交成功'));
 		}
 		
+	}
+	private function getNumbers($arr){
+
+		foreach ($arr as $key => $value) {
+			$sort=$value->sort;
+			$correct=$value->value;
+			$answer = $this->QuestionsModel->getQuest($sort);
+			$this_answer=unserialize($answer);
+			print_r($this_answer);
+			exit;
+		}
 	}
 }
