@@ -17,7 +17,7 @@ new Vue({
 		],
 		mykey:1,
 		qid:0,
-		maxlength:3,
+		maxlength:2,
 	},
 	mounted:function(){
 		let _self=this;
@@ -52,7 +52,7 @@ new Vue({
 					return false;
 				}
 				if(now_list.length<_self.maxlength){
-					layer.msg('选项不能小于3个');
+					layer.msg('选项不能小于2个');
 					return false;
 				}
 			let isOnlyOne=0;
