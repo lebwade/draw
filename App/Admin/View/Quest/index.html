@@ -41,5 +41,10 @@
         </tr>
     </table>
 </div>
-
+<script type="text/javascript">
+    function product_option(page){
+        var brand_name = $('#name').val();
+        location="{:U('index')}?page="+page;
+    }
+</script>
 <include file="Public/footer" />

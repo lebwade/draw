@@ -12,6 +12,12 @@ class QuestionsModel extends Model{
 			self::TYPE_SIMPLE=>'基础知识题库',
 			self::TYPE_DIFFICULT=>'操作题库',
 	);
+	public function getQuest($id){
+		$this->where(array('id'=>$id));
+		return $this->getField('answer');
+	}
+
+
 	public function accuracy($qid,$input_selected){
 		if(is_string($qid) &&$qid){
 			$qid_arr =explode(',', $qid);

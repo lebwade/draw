@@ -33,16 +33,35 @@ class ActiveController extends PublicController {
 
 			$choose =$post['chose'];
 			$str=json_decode(htmlspecialchars_decode($choose));
-			
+			$correct = $this->getNumbers($str);
 			$questionAnswerLogTable=M('question_answer_log');
-
-			$correct =0;
-			$save_data['theme_id']=$post['theme_id'];
+			$save_data['theme_id']=$post['themeid'];
 			$save_data['timu_id']=$post['qid'];
 			$save_data['correct']=$correct;
+			$save_data['created']=time();
+			$save_data['uid']=$post['uid'];
 			$res=$questionAnswerLogTable->add($save_data);
-			$this->ajaxReturn(array('error'=>0,'message'=>'提交成功'));
+			$this->ajaxReturn(array('error'=>0,'message'=>'提交成功','correct'=>$correct));
 		}
 		
+	}
+	private function getNumbers($arr){
+		$my_answer_count=0;
+		foreach ($arr as $key => $value) {
+			$sort=$value->sort;
+			$correct=$value->value;
+			$answer = $this->QuestionsModel->getQuest($sort);
+			$this_answer=unserialize($answer);
+			$db_key=0;
+			foreach($this_answer as $key=>$v){
+				$mykey=$key+1;
+				if($v['attr_correct']==2){
+					$db_key=$mykey;
+					break;
+				}
+			}
+			if($db_key==$correct) $my_answer_count++;
+		}
+		return $my_answer_count;
 	}
 }
