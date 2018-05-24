@@ -19,6 +19,8 @@ class LotteryController extends PublicController {
 	 * @return [type] [description]
 	 */
 	public function index(){
+		$uid =I('post.uid');
+		$themeid =I('post.themeid');
 		$prizeTable =M('prize_good');
 		$prizeLog =M('prize_log');
 
@@ -34,7 +36,6 @@ class LotteryController extends PublicController {
 			}
 			//根据答题结果 正确率越高奖级别越高 提前配置 答对范围 给予重新分配概率
 
-
 			$new_goods[$value['id']]=$value['probility'];//获取概率索引
 		}
 		$rid=$this->get_rand($new_goods);
@@ -45,9 +46,25 @@ class LotteryController extends PublicController {
 		// for($i=0;$i<count($goods);$i++){ 
 		//  $pr[] = $goods[$i]['prize']; 
 		// } 
-		// $res['no'] = $pr; 
-		print_r($res);
+		// $res['no'] = $pr;
+		$arr_prize=array(1=>array(0,4),2=>array(1,5),3=>array(2,6),4=>array(3,7));
+		$now_arr=$arr_prize[$rid];
+		$randkey =array_rand($now_arr);
+		$award_index = $now_arr[$randkey];
+		$shunxu =$this->getPosition($themeid,$rid);
+		$ARdata=array('themeid'=>$themeid,'prize_level'=>$rid,'uid'=>$uid);
+		$this->saveData($ARdata);
+		$response =array('error'=>0,'data'=>array('shunxu'=>$shunxu,'prize'=>$res['yes'],'awardIndex'=>$award_index));
+		$this->ajaxReturn($response);
 
+	}
+	private function getPosition($themeid,$prize_level){
+		$count =M('prize_log')->where(array('themeid'=>$themeid,'prize_level'=>$prize_level))->count();
+		return ++$count;
+	}
+	private function saveData($data){
+		$data['created']=time();
+		return M('prize_log')->add($data);
 	}
 	/*
 	 * 经典的概率算法，
