@@ -14,8 +14,17 @@ class ActiveController extends PublicController {
 	public function index(){
 		if(IS_POST){
 			$code  =I('post.code');
+			$uid  =I('post.uid');
 			$where['is_open']=1;
 			$onlyThemes =$this->themes->where($where)->order('end_time DESC')->find();
+			//判断是否已经玩过了
+			$mapWhere['uid']=$uid;
+			$mapWhere['theme_id']=$onlyThemes['id'];
+
+			$count=M('question_answer_log')->where($mapWhere)->count();
+			if($count){
+				$this->ajaxReturn(array('error'=>0,'message'=>'已经参加过了','result'=>false));
+			}
 			if($onlyThemes['beg_time'] < time() && $onlyThemes['end_time'] >time() && $onlyThemes['invite_code']==trim($code)){
 				$this->ajaxReturn(array('error'=>0,'message'=>'验证成功','result'=>true));
 			}else{
