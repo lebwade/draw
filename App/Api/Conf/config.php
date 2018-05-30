@@ -3,7 +3,7 @@
 header("Content-Type:text/html; charset=utf-8");
 error_reporting(0);
 
-define('SELF_ROOT','https://sc.safetysino.com');
+define('SELF_ROOT','https://draw.51asx.com');
 //define('SELF_ROOT','/');
 
 $urkn= SELF_ROOT."Data/app/";
@@ -51,14 +51,14 @@ return array(
     'weixin'=>array(
 
 
-        'appid' =>'wx02ab742261c66bc6',			//微信appid
-        'secret'=>'7c835bf91824471ac813f94132f1f5a2', //微信secret
+        'appid' =>'wxec70082f0d8462f0',			//微信appid
+        'secret'=>'101360b4718eab14f5b9743591107154', //微信secret
 
-        'mchid' => '1498468992',
-        'key' => 'gWs9UGU2iohWs8sTxt0asTf8oGsfgdcT',
+        'mchid' => '',
+        'key' => '',
 
         //这里是异步通知页面url，提交到项目的Pay控制器的notifyurl方法；
-        'notify_url'=>'https://sc.safetysino.com/Api/Wxpay/notify',
+        'notify_url'=>'https://draw.51asx.com/api/Wxpay/notify',
 
     ),
 );
