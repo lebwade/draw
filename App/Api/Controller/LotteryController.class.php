@@ -52,7 +52,7 @@ class LotteryController extends PublicController {
 		$randkey =array_rand($now_arr);
 		$award_index = $now_arr[$randkey];
 		$shunxu =$this->getPosition($themeid,$rid);
-		$ARdata=array('themeid'=>$themeid,'prize_level'=>$rid,'uid'=>$uid);
+		$ARdata=array('themeid'=>$themeid,'prize_level'=>$rid,'uid'=>$uid,'prize'=>$res['yes'],'shunxu'=>$shunxu);
 		$this->saveData($ARdata);
 		$response =array('error'=>0,'data'=>array('shunxu'=>$shunxu,'prize'=>$res['yes'],'awardIndex'=>$award_index));
 		$this->ajaxReturn($response);
