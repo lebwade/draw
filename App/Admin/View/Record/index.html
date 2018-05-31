@@ -1,0 +1,62 @@
+<include file="Public/header" />
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 问题管理 <span class="c-gray en">&gt;</span> 问题管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<style type="text/css">
+	.choose{font-weight: bold;font-size: 16px;color: red;}
+</style>
+
+<div class="page-container">
+    <div class="text-c">
+
+    </div>
+    <br>
+    <table class="table table-border table-bordered table-bg">
+        <thead>
+
+        <tr class="text-c">
+            <th width="100">ID</th>
+            <th>主题</th>
+            <th>昵称</th>
+            <th>头像</th>
+            <th >问题与答案</th>
+            <th >正确数</th>
+        </tr>
+        </thead>
+
+
+        <tbody id="news_option">
+        <!-- 遍历 -->
+        <volist name="list" id="v" empty="暂时没有数据">
+            <tr class="text-c">
+                <td>{$v.id}</td>
+                <td>{$v.theme_title}</td>
+                <td>{$v.nickname}</td>
+                <td><img src="{$v.headimgurl}" width="80" height="80"></td>
+               
+
+                <td>
+                	<volist name="v.content" id="vv" >
+                		<div><label>{$vv.title}:{$vv.question}</label></div>
+                		<div>
+                			选项:
+                			<volist name="vv.answer" key="mykey" id="vvv">
+                				<span  <?=$vvv['attr_correct']==2?'class="choose"':''?> >{$vvv.attr_option}</span><span style="margin:10px;"></span>
+                			</volist>
+                		</div>
+                		<div>
+                			我的选择<span style="color: red;">{$vv.select}</span>
+                		</div>
+                	</volist>
+                </td>
+                <td>{$v.correct}</td>
+            </tr>
+        </volist>
+        <!-- 遍历 -->
+        </tbody>
+        <tr>
+            <td colspan="10" class="td_2">
+                {$page_index}
+            </td>
+        </tr>
+    </table>
+</div>
+<include file="Public/footer" />
