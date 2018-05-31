@@ -47,7 +47,7 @@ class ActiveController extends PublicController {
 			$save_data['theme_id']=$post['themeid'];
 			$save_data['timu_id']=$post['qid'];
 			$save_data['correct']=$correct;
-			$save_data['select']=$str;
+			$save_data['select']=htmlspecialchars_decode($choose);
 			$save_data['created']=time();
 			$save_data['uid']=$post['uid'];
 			$res=$questionAnswerLogTable->add($save_data);
