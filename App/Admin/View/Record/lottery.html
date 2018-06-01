@@ -1,0 +1,55 @@
+<include file="Public/header" />
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 记录  <span class="c-gray en">&gt;</span> 抽奖记录 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+
+<div class="page-container">
+    <div class="text-c">
+        <form>
+            <span>主题：</span>
+            <div class="select-box" style="width: 300px;">
+                <select name="themeid" class="select" >
+                    <option value="0">--所有--</option>
+                    <volist name="themes" id="item">
+                        <option value="{$item.id}">{$item.theme_title}</option>
+                    </volist>
+                </select>
+            </div>
+        <input type="submit" class="btn btn-primary"  value="搜索">
+        </form>
+    </div>
+    <br>
+    <table class="table table-border table-bordered table-bg">
+        <thead>
+
+        <tr class="text-c">
+            <th width="100">ID</th>
+            <th>主题</th>
+            <th>昵称</th>
+            <th>头像</th>
+            <th >奖项</th>
+            <th >排名</th>
+        </tr>
+        </thead>
+
+
+        <tbody id="news_option">
+        <!-- 遍历 -->
+        <volist name="list" id="v" empty="暂时没有数据">
+            <tr class="text-c">
+                <td>{$v.id}</td>
+                <td>{$v.theme_title}</td>
+                <td>{$v.nickname}</td>
+                <td><img src="{$v.headimgurl}" width="80" height="80"></td>
+                <td>{$v.prize}</td>
+                <td>{$v.shunxu}</td>
+            </tr>
+        </volist>
+        <!-- 遍历 -->
+        </tbody>
+        <tr>
+            <td colspan="10" class="td_2">
+                {$page_index}
+            </td>
+        </tr>
+    </table>
+</div>
+<include file="Public/footer" />
