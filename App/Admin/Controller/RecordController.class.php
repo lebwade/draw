@@ -4,7 +4,7 @@
  * @Author: xiecl
  * @Date:   2018-05-31 19:09:14
  * @Last Modified by:   congli.xie
- * @Last Modified time: 2018-06-05 19:09:23
+ * @Last Modified time: 2018-06-05 19:33:35
  */
 namespace Admin\Controller;
 use Think\Controller;
@@ -53,6 +53,7 @@ class RecordController extends PublicController{
 				$timu_id = $value['timu_id'];
 				$timu_arr = explode(",", $timu_id);
 				$select = json_decode($value['select']);
+				$content =[];
 				foreach($select as $mykey=>$next){
 					$timuInfo = M('questions')->where(array('id'=>$next->sort))->find();
 					$answer = unserialize($timuInfo['answer']);
@@ -61,7 +62,7 @@ class RecordController extends PublicController{
 					$content[] =array(
 						'question'=>$timuInfo['question'],
 						'answer'=>$answer,
-						'select'=>$this->checkSelect($next->value),
+						'select'=>$this->checkSelect($next->value-1),
 						'title'=>$this->getTitle($mykey),
 					);
 				}
