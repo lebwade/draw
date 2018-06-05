@@ -4,7 +4,7 @@
  * @Author: xiecl
  * @Date:   2018-05-31 19:09:14
  * @Last Modified by:   congli.xie
- * @Last Modified time: 2018-06-05 19:06:21
+ * @Last Modified time: 2018-06-05 19:09:23
  */
 namespace Admin\Controller;
 use Think\Controller;
@@ -114,11 +114,11 @@ class RecordController extends PublicController{
 		if(!empty($list)){
 			foreach ($list as $key => $value) {
 				$info =$userTable->where(array('id'=>$value['uid']))->find();
-				$themeInfo =$themeTable->where(array('id'=>$value['theme_id']))->find();
+				$themeInfo =$themeTable->where(array('id'=>$value['themeid']))->find();
 				$value['theme_title']=$themeInfo['theme_title'];
-				$value['nickname']=$themeInfo['name'];
-				$value['headimgurl']=$themeInfo['photo'];
-				$new_list []=$value;
+				$value['nickname']=$info['name'];
+				$value['headimgurl']=$info['photo'];
+				$new_list[]=$value;
 			}
 		}
 		$this->assign('themes',$themeTable->select());
