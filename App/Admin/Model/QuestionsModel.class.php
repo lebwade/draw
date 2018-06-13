@@ -39,13 +39,13 @@ class QuestionsModel extends Model{
 	public function randGetQuest()
 	{	
 		$title_arr =array(
-			1=>'题目一',
-			2=>'题目二',
-			3=>'题目三',
-			4=>'题目四',
-			5=>'题目五',
-			6=>'题目六',
-			7=>'题目七',
+			1=>'单选题一',
+			2=>'单选题二',
+			3=>'单选题三',
+			4=>'单选题四',
+			5=>'单选题五',
+			6=>'单选题六',
+			7=>'单选题七',
 		);
 		$all_list=array();
 		while (count($all_list) < 3) {
