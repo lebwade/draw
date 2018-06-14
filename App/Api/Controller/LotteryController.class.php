@@ -23,7 +23,7 @@ class LotteryController extends PublicController {
 		$themeid =I('post.themeid');
 		$prizeTable =M('prize_good');
 		$prizeLog =M('prize_log');
-		$hasCount =$prizeTable->where(array('uid'=>$uid,'themeid'=>$themeid))->count();
+		$hasCount =$prizeLog->where(array('uid'=>$uid,'themeid'=>$themeid))->count();
 		if($hasCount){
 			$response =array('error'=>1,'message'=>'已经抽奖过了');
 			$this->ajaxReturn($response);
