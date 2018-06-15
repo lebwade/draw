@@ -51,7 +51,7 @@ class LotteryController extends PublicController {
 		//  $pr[] = $goods[$i]['prize']; 
 		// } 
 		// $res['no'] = $pr;
-		$arr_prize=array(1=>array(0,4),2=>array(1,5),3=>array(2,6),4=>array(3,7));
+		$arr_prize=array(1=>array(0),2=>array(3,6),3=>array(1,4,8),4=>array(2,5,7,9));
 		$now_arr=$arr_prize[$rid];
 		$randkey =array_rand($now_arr);
 		$award_index = $now_arr[$randkey];
