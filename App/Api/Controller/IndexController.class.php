@@ -24,8 +24,8 @@ class IndexController extends PublicController {
             $status=0;
         }else{
             $map['themd_id'] = $themesInfo['id'];
-            // $hasjoin =$this->userJoinTable->where($map)->count();
-            // if($hasjoin>0) $status=1;
+            $hasjoin =$this->userJoinTable->where($map)->count();
+            if($hasjoin>0) $status=1;
             if(time()>$themesInfo['beg_time'] && time()<$themesInfo['end_time']){
                 $status=2;
             }else{
