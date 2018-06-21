@@ -24,10 +24,10 @@ class LotteryController extends PublicController {
 		$prizeTable =M('prize_good');
 		$prizeLog =M('prize_log');
 		$hasCount =$prizeLog->where(array('uid'=>$uid,'themeid'=>$themeid))->count();
-		if($hasCount){
-			$response =array('error'=>1,'message'=>'已经抽奖过了');
-			$this->ajaxReturn($response);
-		}
+		// if($hasCount){
+		// 	$response =array('error'=>1,'message'=>'已经抽奖过了');
+		// 	$this->ajaxReturn($response);
+		// }
 		$goods =$prizeTable->order('id asc')->select();
 		$new_goods =array();
 		foreach ($goods as $key => $value) {

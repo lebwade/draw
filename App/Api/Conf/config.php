@@ -3,7 +3,7 @@
 header("Content-Type:text/html; charset=utf-8");
 error_reporting(0);
 
-define('SELF_ROOT','https://draw.51asx.com');
+define('SELF_ROOT','https://biolox.ceramtec.com.cn');
 //define('SELF_ROOT','/');
 
 $urkn= SELF_ROOT."Data/app/";
@@ -51,14 +51,14 @@ return array(
     'weixin'=>array(
 
 
-        'appid' =>'wxec70082f0d8462f0',			//微信appid
-        'secret'=>'101360b4718eab14f5b9743591107154', //微信secret
+        'appid' =>'wxe2ba6c8aa8d35a5c',			//微信appid
+        'secret'=>'f1f7e511dc5743079fef99591a7c689a', //微信secret
 
         'mchid' => '',
         'key' => '',
 
         //这里是异步通知页面url，提交到项目的Pay控制器的notifyurl方法；
-        'notify_url'=>'https://draw.51asx.com/api/Wxpay/notify',
+        'notify_url'=>'https://biolox.ceramtec.com.cn/api/Wxpay/notify',
 
     ),
 );
