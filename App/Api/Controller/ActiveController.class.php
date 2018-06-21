@@ -22,9 +22,9 @@ class ActiveController extends PublicController {
 			$mapWhere['theme_id']=$onlyThemes['id'];
 
 			$count=M('question_answer_log')->where($mapWhere)->count();
-			if($count){
-				$this->ajaxReturn(array('error'=>1,'message'=>'已经参加过了','result'=>false));
-			}
+			// if($count){
+			// 	$this->ajaxReturn(array('error'=>1,'message'=>'已经参加过了','result'=>false));
+			// }
 			if($onlyThemes['beg_time'] < time() && $onlyThemes['end_time'] >time() && $onlyThemes['invite_code']==trim($code)){
 				$this->ajaxReturn(array('error'=>0,'message'=>'验证成功','result'=>true));
 			}else{
