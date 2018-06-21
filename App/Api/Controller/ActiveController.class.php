@@ -50,8 +50,12 @@ class ActiveController extends PublicController {
 			$save_data['select']=htmlspecialchars_decode($choose);
 			$save_data['created']=time();
 			$save_data['uid']=$post['uid'];
-			$res=$questionAnswerLogTable->add($save_data);
-			$this->ajaxReturn(array('error'=>0,'message'=>'提交成功','correct'=>$correct));
+			try{
+				$res=$questionAnswerLogTable->add($save_data);
+				$this->ajaxReturn(array('error'=>0,'message'=>'提交成功','correct'=>$correct));
+			}catch(\Exception $e){
+				$this->ajaxReturn(array('error'=>1,'message'=>'提交失败','correct'=>$correct));
+			}
 		}
 		
 	}
