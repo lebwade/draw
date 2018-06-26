@@ -74,14 +74,14 @@ class QuestionsModel extends Model{
 	}
 	private function getBasicData(){
 		$this->table =C('DB_PREFIX').$this->tableName;
-		$basic_sql ="SELECT t1.id as tid,question,answer,type,is_on,created FROM ".$this->table." AS t1 JOIN (SELECT ROUND(RAND() * (SELECT MAX(id) FROM ".$this->table." WHERE type=".self::TYPE_SIMPLE.")) AS id) AS t2 WHERE t1.id >= t2.id AND type=".self::TYPE_SIMPLE." ORDER BY t1.id ASC LIMIT 1";
+		$basic_sql ="SELECT t1.id as tid,question,answer,type,is_on,created FROM ".$this->table." AS t1 JOIN (SELECT ROUND(RAND() * (SELECT MAX(id) FROM ".$this->table." WHERE type=".self::TYPE_SIMPLE.")) AS id) AS t2 WHERE t1.id >= t2.id AND type=".self::TYPE_SIMPLE." AND t1.is_on=1 ORDER BY t1.id ASC LIMIT 1";
 		$basic_out=$this->query($basic_sql);
 		$aData =isset($basic_out[0])?$basic_out[0]:null;
 		return $this->changeDataFormater($aData);
 	}
 	private function getOperatorData(){
 		$this->table =C('DB_PREFIX').$this->tableName;
-		$operator_sql ="SELECT t1.id as tid,question,answer,type,is_on,created FROM ".$this->table." AS t1 JOIN (SELECT ROUND(RAND() * (SELECT MAX(id) FROM ".$this->table." WHERE type=".self::TYPE_DIFFICULT.")) AS id) AS t2 WHERE t1.id >= t2.id AND type=".self::TYPE_DIFFICULT." ORDER BY t1.id ASC LIMIT 1";
+		$operator_sql ="SELECT t1.id as tid,question,answer,type,is_on,created FROM ".$this->table." AS t1 JOIN (SELECT ROUND(RAND() * (SELECT MAX(id) FROM ".$this->table." WHERE type=".self::TYPE_DIFFICULT.")) AS id) AS t2 WHERE t1.id >= t2.id AND type=".self::TYPE_DIFFICULT." AND t1.is_on=1 ORDER BY t1.id ASC LIMIT 1";
 		$operator_out=$this->query($operator_sql);
 		$aData= isset($operator_out[0])?$operator_out[0]:null;
 		return $this->changeDataFormater($aData);
