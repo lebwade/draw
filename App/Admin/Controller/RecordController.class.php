@@ -138,7 +138,7 @@ class RecordController extends PublicController{
 		if(IS_POST){
 			$post =I('post.');
 			foreach ($post['id'] as $key => $value) {
-				$prizeGood->where(array('id'=>$value))->save(array('probility'=>$post['probility'][$key],'limit_number'=>$post['limit_numberi'][$key]));
+				$prizeGood->where(array('id'=>$value))->save(array('probility'=>$post['probility'][$key],'limit_number'=>$post['limit_number'][$key]));
 			}
 
 			$this->ajaxReturn(array('error'=>0,'message'=>'保存成功'));
