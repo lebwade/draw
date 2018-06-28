@@ -26,6 +26,7 @@
             <th>昵称</th>
             <th>头像</th>
             <th >奖项</th>
+			<th>时间</th>
             <th >排名</th>
         </tr>
         </thead>
@@ -40,6 +41,7 @@
                 <td>{$v.nickname}</td>
                 <td><img src="{$v.headimgurl}" width="80" height="80"></td>
                 <td>{$v.prize}</td>
+				<td><?=date('Y-m-d H:i:s',$v['created'])?></td>
                 <td>{$v.shunxu}</td>
             </tr>
         </volist>
