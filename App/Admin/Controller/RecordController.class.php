@@ -112,7 +112,7 @@ class RecordController extends PublicController{
 
 		$show  = $Page->show();// 分页显示输出
 		$rows=ceil($count/rows);
-		$list = $this->_prizeTable->where($condition)->limit($limit,rows)->order('shunxu desc,created desc')->select();
+		$list = $this->_prizeTable->where($condition)->limit($limit,rows)->order('created desc,shunxu desc')->select();
 		$new_list =array();
 		$userTable =M('user');
 		$themeTable =M('themes');
@@ -130,7 +130,7 @@ class RecordController extends PublicController{
 		$this->assign('themes',$themeTable->select());
 		$this->assign('list',$new_list);
 		$this->assign('page_index',$page_index);
-		$this->assign('page',$show);
+		$this->assign('page',$page);
 		$this->display(); // 输出模板
 	}
 	/**
