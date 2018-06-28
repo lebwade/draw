@@ -111,7 +111,7 @@ class RecordController extends PublicController{
 	    $Page->setConfig('theme', '%FIRST%%UP_PAGE%%LINK_PAGE%%DOWN_PAGE%%END%%HEADER%');
 
 		$show  = $Page->show();// 分页显示输出
-
+		$rows=ceil($count/rows);
 		$list = $this->_prizeTable->where($condition)->limit($limit,rows)->order('shunxu desc,created desc')->select();
 		$new_list =array();
 		$userTable =M('user');
