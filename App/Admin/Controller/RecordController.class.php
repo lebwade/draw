@@ -90,6 +90,10 @@ class RecordController extends PublicController{
 			$condition['themeid'] = $themeid;
 			$this->assign('themeid',$themeid);
 		}
+		define('rows',20);
+		$page=(int)$_GET['page'];
+		$page<0?$page=0:'';
+		$limit=$page*rows;
 		//分页
 		$count   = $this->_prizeTable->where($condition)->count();// 查询满足要求的总记录数
 		$Page    = new \Think\Page($count,20);// 实例化分页类 传入总记录数和每页显示的记录数(25)
@@ -108,7 +112,7 @@ class RecordController extends PublicController{
 
 		$show  = $Page->show();// 分页显示输出
 
-		$list = $this->_prizeTable->where($condition)->limit($Page->firstRow.','.$Page->listRows)->order('shunxu desc,created desc')->select();
+		$list = $this->_prizeTable->where($condition)->limit($limit,rows)->order('shunxu desc,created desc')->select();
 		$new_list =array();
 		$userTable =M('user');
 		$themeTable =M('themes');
@@ -122,8 +126,10 @@ class RecordController extends PublicController{
 				$new_list[]=$value;
 			}
 		}
+		$page_index=$this->page_index($count,$rows,$page);
 		$this->assign('themes',$themeTable->select());
 		$this->assign('list',$new_list);
+		$this->assign('page_index',$page_index);
 		$this->assign('page',$show);
 		$this->display(); // 输出模板
 	}
