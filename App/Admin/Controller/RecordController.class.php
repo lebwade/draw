@@ -96,21 +96,9 @@ class RecordController extends PublicController{
 		$limit=$page*rows;
 		//分页
 		$count   = $this->_prizeTable->where($condition)->count();// 查询满足要求的总记录数
-		$Page    = new \Think\Page($count,20);// 实例化分页类 传入总记录数和每页显示的记录数(25)
+	
 
-		//头部描述信息，默认值 “共 %TOTAL_ROW% 条记录”
-		$Page->setConfig('header', '<li class="rows">共<b>%TOTAL_ROW%</b>条&nbsp;第<b>%NOW_PAGE%</b>页/共<b>%TOTAL_PAGE%</b>页</li>');
-		//上一页描述信息
-	    $Page->setConfig('prev', '上一页');
-	    //下一页描述信息
-	    $Page->setConfig('next', '下一页');
-	    //首页描述信息
-	    $Page->setConfig('first', '首页');
-	    //末页描述信息
-	    $Page->setConfig('last', '末页');
-	    $Page->setConfig('theme', '%FIRST%%UP_PAGE%%LINK_PAGE%%DOWN_PAGE%%END%%HEADER%');
-
-		$show  = $Page->show();// 分页显示输出
+		//$show  = $Page->show();// 分页显示输出
 		$rows=ceil($count/rows);
 		$list = $this->_prizeTable->where($condition)->limit($limit,rows)->order('created desc,shunxu desc')->select();
 		$new_list =array();
