@@ -41,13 +41,14 @@ class ActiveController extends PublicController {
 			$post =I('post.');
 
 			$choose =$post['chose'];
-			$str=json_decode(htmlspecialchars_decode($choose));
+			//$str=json_decode(htmlspecialchars_decode($choose));
+			$str =$this->changeFor($choose);
 			$correct = $this->getNumbers($str);
 			$questionAnswerLogTable=M('question_answer_log');
 			$save_data['theme_id']=$post['themeid'];
 			$save_data['timu_id']=$post['qid'];
 			$save_data['correct']=$correct;
-			$save_data['select']=htmlspecialchars_decode($choose);
+			$save_data['select']=htmlspecialchars_decode($str);
 			$save_data['created']=time();
 			$save_data['uid']=$post['uid'];
 			try{
@@ -58,6 +59,22 @@ class ActiveController extends PublicController {
 			}
 		}
 		
+	}
+	public function changeFor($str){
+		// $str='[{"sort":"5","value":"2"},{"sort":"6","value":"2"},{"sort":"11","value":"2"},{"sort":"14","value":"1"},{"sort":"6","value":"2"},{"sort":"11","value":"2"},{"sort":"14","value":"1"},{"sort":"17","value":"1"}]';
+		$arr = json_decode(htmlspecialchars_decode($str));
+		$selected=array();
+		$new_str=array();
+		foreach($arr as $v){
+			$sort=$v->sort;
+			if(!in_array($sort,$selected)){
+				array_push($selected,$sort);
+				$new_str[]=$v;
+			}
+		}
+		$last_str=htmlspecialchars(json_encode($new_str));
+		return $last_str;
+
 	}
 	private function getNumbers($arr){
 		$my_answer_count=0;
