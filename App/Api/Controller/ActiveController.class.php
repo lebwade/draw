@@ -43,12 +43,12 @@ class ActiveController extends PublicController {
 			$choose =$post['chose'];
 			//$str=json_decode(htmlspecialchars_decode($choose));
 			$str =$this->changeFor($choose);
-			$correct = $this->getNumbers($str);
+			$correct = $this->getNumbers($str['b']);
 			$questionAnswerLogTable=M('question_answer_log');
 			$save_data['theme_id']=$post['themeid'];
 			$save_data['timu_id']=$post['qid'];
 			$save_data['correct']=$correct;
-			$save_data['select']=htmlspecialchars_decode($str);
+			$save_data['select']=htmlspecialchars_decode($str['a']);
 			$save_data['created']=time();
 			$save_data['uid']=$post['uid'];
 			try{
@@ -73,7 +73,7 @@ class ActiveController extends PublicController {
 			}
 		}
 		$last_str=htmlspecialchars(json_encode($new_str));
-		return $last_str;
+		return array('a'=>$last_str,'b'=>$new_str);
 
 	}
 	private function getNumbers($arr){
