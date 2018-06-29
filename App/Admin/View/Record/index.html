@@ -59,4 +59,18 @@
         </tr>
     </table>
 </div>
+<script>
+ //分页
+    function product_option(page){
+        var obj={
+            "name":$("#name").val(),
+            "tel":$("#tel").val(),
+        }
+        var url='?page='+page;
+        $.each(obj,function(a,b){
+            url+='&'+a+'='+b;
+        });
+        location=url;
+    }
+</script>
 <include file="Public/footer" />

@@ -4,7 +4,7 @@
  * @Author: xiecl
  * @Date:   2018-05-31 19:09:14
  * @Last Modified by:   congli.xie
- * @Last Modified time: 2018-06-29 09:19:26
+ * @Last Modified time: 2018-06-29 09:21:15
  */
 namespace Admin\Controller;
 use Think\Controller;
@@ -60,6 +60,7 @@ class RecordController extends PublicController{
 				$new_list[]=$value;
 			}
 		}
+		$rows=ceil($count/rows);
 		$page_index=$this->page_index($count,$rows,$page);
 		$this->assign('page_index',$page_index);
 		$this->assign('page',$page);
