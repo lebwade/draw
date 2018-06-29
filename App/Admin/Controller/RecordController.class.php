@@ -4,7 +4,7 @@
  * @Author: xiecl
  * @Date:   2018-05-31 19:09:14
  * @Last Modified by:   congli.xie
- * @Last Modified time: 2018-06-05 19:33:35
+ * @Last Modified time: 2018-06-29 09:19:26
  */
 namespace Admin\Controller;
 use Think\Controller;
@@ -23,23 +23,13 @@ class RecordController extends PublicController{
 		$condition =array();
 		//分页
 		$count   = $this->_questionTable->where($condition)->count();// 查询满足要求的总记录数
-		$Page    = new \Think\Page($count,20);// 实例化分页类 传入总记录数和每页显示的记录数(25)
+		define('rows',20);
+		$page=(int)$_GET['page'];
+		$page<0?$page=0:'';
+		$limit=$page*rows;
 
-		//头部描述信息，默认值 “共 %TOTAL_ROW% 条记录”
-		$Page->setConfig('header', '<li class="rows">共<b>%TOTAL_ROW%</b>条&nbsp;第<b>%NOW_PAGE%</b>页/共<b>%TOTAL_PAGE%</b>页</li>');
-		//上一页描述信息
-	    $Page->setConfig('prev', '上一页');
-	    //下一页描述信息
-	    $Page->setConfig('next', '下一页');
-	    //首页描述信息
-	    $Page->setConfig('first', '首页');
-	    //末页描述信息
-	    $Page->setConfig('last', '末页');
-	    $Page->setConfig('theme', '%FIRST%%UP_PAGE%%LINK_PAGE%%DOWN_PAGE%%END%%HEADER%');
 
-		$show  = $Page->show();// 分页显示输出
-
-		$list = $this->_questionTable->where($condition)->limit($Page->firstRow.','.$Page->listRows)->order('created desc')->select();
+		$list = $this->_questionTable->where($condition)->limit($limit,rows)->order('created desc')->select();
 		$new_list =array();
 		$userTable =M('user');
 		$themeTable =M('themes');
@@ -70,9 +60,10 @@ class RecordController extends PublicController{
 				$new_list[]=$value;
 			}
 		}
-		//print_r($new_list);exit;
+		$page_index=$this->page_index($count,$rows,$page);
+		$this->assign('page_index',$page_index);
+		$this->assign('page',$page);
 		$this->assign('list',$new_list);
-		$this->assign('page',$show);
 		$this->display(); // 输出模板
 	}
 	public function getTitle($key){
