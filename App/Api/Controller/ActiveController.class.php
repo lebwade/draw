@@ -15,6 +15,9 @@ class ActiveController extends PublicController {
 		if(IS_POST){
 			$code  =I('post.code');
 			$uid  =I('post.uid');
+			if(!$uid){
+				$this->ajaxReturn(array('error'=>1,'message'=>'用户身份信息不存在','result'=>false));
+			}
 			$where['is_open']=1;
 			$onlyThemes =$this->themes->where($where)->order('end_time DESC')->find();
 			//判断是否已经玩过了
