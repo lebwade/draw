@@ -3,7 +3,7 @@
 
 <div class="page-container">
     <div class="text-c">
-        <form>
+        <form style="width: 460px;float: left;">
             <span>主题：</span>
             <div class="select-box" style="width: 300px;">
                 <select name="themeid" class="select" >
@@ -15,9 +15,13 @@
             </div>
         <input type="submit" class="btn btn-primary"  value="搜索">
         </form>
+        <form action="" id="form-tj" style="width: 100px;float: left;">
+        <input type="hidden" name="opt" value="export" >
+        <input type="submit"  class="btn btn-success" value="导出">
+        </form>
     </div>
     <br>
-    <table class="table table-border table-bordered table-bg">
+    <table class="table table-border table-bordered table-bg" style="margin-top: 50px;">
         <thead>
 
         <tr class="text-c">
