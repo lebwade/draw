@@ -21,6 +21,7 @@ class LotteryController extends PublicController {
 	public function index(){
 		$uid =I('post.uid');
 		$themeid =I('post.themeid');
+		$themeid =1;
 		$prizeTable =M('prize_good');
 		$prizeLog =M('prize_log');
 		$hasCount =$prizeLog->where(array('uid'=>$uid,'themeid'=>$themeid))->count();
